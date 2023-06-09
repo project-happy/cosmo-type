@@ -28,13 +28,13 @@ public class TextType : MonoBehaviour
     [SerializeField] float explosionDestroyDelay = 0.75f;
 
     [SerializeField] TargetsManager targetsManager;
-    [SerializeField] private Mover shipMover;
 
     [SerializeField] private List<Word> words;
     [SerializeField] private AudioClip expSoundEffect;
     [SerializeField] private GameObject hit_effect;
 
 
+    private Mover shipMover;
     private int currentWordLength;
     private string fullText;
     private int health;

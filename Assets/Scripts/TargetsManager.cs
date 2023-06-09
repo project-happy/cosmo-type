@@ -35,6 +35,9 @@ public enum ModeType
 
     [Description("story-mode")]
     STORY,
+
+    [Description("tutorial")]
+    TUTORIAL,
 }
 
 
@@ -50,7 +53,7 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] private int wave = 1;
 
-    [SerializeField] List<Transform> spawners;
+    //[SerializeField] List<Transform> spawners;
 
     [SerializeField] float maxSpawnHDistance = 3f;
 
@@ -62,10 +65,9 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] bool shuffleWords = true;
 
+    [SerializeField] private List<GameObject> targets;
     public int Count { get { return targets.Count; } }
 
-
-    private List<GameObject> targets;
 
 
     private float minSpawnDelay = .37f;
@@ -77,6 +79,8 @@ public class TargetsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (mode == ModeType.TUTORIAL)
+            return;
         targets = new List<GameObject>();
         StartCoroutine(SpawnTargets());
     }
