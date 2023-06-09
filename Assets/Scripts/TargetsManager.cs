@@ -53,7 +53,7 @@ public class TargetsManager : MonoBehaviour
     [SerializeField] List<Transform> spawners;
 
     [SerializeField] float maxSpawnHDistance = 3f;
-    
+
     [SerializeField] float maxSpawnVDistance = 3f;
 
     [SerializeField] ModeType mode;
@@ -101,8 +101,7 @@ public class TargetsManager : MonoBehaviour
 #endif
 
         // Deserialize the JSON data into a list of WordData objects
-        yield return loadedWords = JsonUtility.FromJson<WordDataList>(jsonString).words;
-        //.Shuffle();
+        yield return loadedWords = JsonUtility.FromJson<WordDataList>(jsonString).words.Shuffle();
     }
 
     private IEnumerator SpawnTargets()

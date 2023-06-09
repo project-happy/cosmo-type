@@ -1166,8 +1166,8 @@ MonoBehaviour:
   - {fileID: 1998129140}
   maxSpawnHDistance: 18
   maxSpawnVDistance: 0.28
-  mode: 0
-  spawnDelay: 4
+  mode: 1
+  spawnDelay: 7
 --- !u!1 &1193803758
 GameObject:
   m_ObjectHideFlags: 0
