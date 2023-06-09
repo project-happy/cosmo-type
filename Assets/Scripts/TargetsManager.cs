@@ -60,6 +60,8 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] float spawnDelay = 2f;
 
+    [SerializeField] bool shuffleWords = true;
+
     public int Count { get { return targets.Count; } }
 
 
@@ -101,7 +103,9 @@ public class TargetsManager : MonoBehaviour
 #endif
 
         // Deserialize the JSON data into a list of WordData objects
-        yield return loadedWords = JsonUtility.FromJson<WordDataList>(jsonString).words.Shuffle();
+        yield return loadedWords = JsonUtility.FromJson<WordDataList>(jsonString).words;
+        if (shuffleWords)
+            loadedWords = loadedWords.Shuffle();
     }
 
     private IEnumerator SpawnTargets()
@@ -123,7 +127,7 @@ public class TargetsManager : MonoBehaviour
             yield return new WaitUntil(() => targets.Count == 0);
 
             // show animation for ending rouund and wait 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
 
             loadedWords = null;
             wave++;
@@ -141,7 +145,7 @@ public class TargetsManager : MonoBehaviour
         isUIMessageDiplayed = false;
     }
 
-    IEnumerator Spawn()
+    protected virtual IEnumerator Spawn()
     {
         InnerWord wordObj;
         while (loadedWords.Count > 0)
@@ -169,18 +173,17 @@ public class TargetsManager : MonoBehaviour
     }
 
 
-    Vector3 GetRandomSpawnPosition()
+    protected Vector3 GetRandomSpawnPosition()
     {
         float x = Random.Range(transform.position.x - maxSpawnHDistance, transform.position.x + maxSpawnHDistance);
         float y = Random.Range(transform.position.y - maxSpawnVDistance, transform.position.y + maxSpawnVDistance);
         return new Vector3(x, y);
     }
 
-    GameObject GetEnemyByType(EnemyType type)
+    protected GameObject GetEnemyByType(EnemyType type)
     {
         if (type == EnemyType.BOSS)
             return boss;
-
         return enemy;
     }
 
