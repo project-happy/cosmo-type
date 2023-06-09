@@ -1168,6 +1168,7 @@ MonoBehaviour:
   maxSpawnVDistance: 0.28
   mode: 2
   spawnDelay: 18
+  shuffleWords: 0
 --- !u!1 &1193803758
 GameObject:
   m_ObjectHideFlags: 0
