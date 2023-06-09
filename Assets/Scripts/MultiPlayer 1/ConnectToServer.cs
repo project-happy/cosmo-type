@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
     void Start()
     {
         Connect();
     }
-
-
 
     //connect to the server
     private void Connect()
@@ -30,6 +29,4 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("MultiLobby");
     }
-
-
 }

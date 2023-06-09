@@ -4,28 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-
 public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
 {
+    [SerializeField]
+    PhotonView photonView;
 
-
-    [SerializeField] PhotonView photonView;
-
-    [SerializeField] bool ranodomSpawn;
+    [SerializeField]
+    bool ranodomSpawn;
     int _targetsAllowed = 1;
     private EnemySpawnManager enemySpawnerManager;
 
     private void Start()
     {
-        enemySpawnerManager = GameObject.FindGameObjectWithTag("EnemySpawnManager").GetComponent<EnemySpawnManager>();
+        enemySpawnerManager = GameObject
+            .FindGameObjectWithTag("EnemySpawnManager")
+            .GetComponent<EnemySpawnManager>();
     }
-
-
-
 
     public GameObject? FindTarget(GameObject gameObj, char searchChar)
     {
-
         MeshText enemyText;
         float minDist = float.MaxValue;
         GameObject target = null;
@@ -36,7 +33,12 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
             TextTypeNetwork enemyTextType = enemy.GetComponent<TextTypeNetwork>();
 
             float dist = Vector3.Distance(gameObj.transform.position, enemy.transform.position);
-            if (!enemyTextType.isTaken && enemyText.Length > 0 && enemyText.FirstChar() == searchChar && dist < minDist)
+            if (
+                !enemyTextType.isTaken
+                && enemyText.Length > 0
+                && enemyText.FirstChar() == searchChar
+                && dist < minDist
+            )
             {
                 target = enemy;
                 minDist = dist;
@@ -53,18 +55,13 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
             LockTarget(target);
         }
 
-
-
         return target;
     }
-
-
 
     public void LockTarget(GameObject target)
     {
         photonView.RPC("LockTargetRPC", RpcTarget.All, target.GetComponent<PhotonView>().ViewID);
     }
-
 
     [PunRPC]
     public void LockTargetRPC(int viewId)
@@ -74,19 +71,23 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
         targetTextType.isTaken = true;
     }
 
-
     public void RemoveTarget(GameObject gameObject)
     {
-        photonView.RPC("RemoveTargetRPC", RpcTarget.All, gameObject.GetComponent<PhotonView>().ViewID);
+        photonView.RPC(
+            "RemoveTargetRPC",
+            RpcTarget.All,
+            gameObject.GetComponent<PhotonView>().ViewID
+        );
     }
+
     [PunRPC]
     private void RemoveTargetRPC(int viewId)
     {
         enemySpawnerManager.RemoveTarget(PhotonView.Find(viewId).gameObject);
     }
 
-
-    public int Count { get { return enemySpawnerManager.Count; } }
-
-
+    public int Count
+    {
+        get { return enemySpawnerManager.Count; }
+    }
 }

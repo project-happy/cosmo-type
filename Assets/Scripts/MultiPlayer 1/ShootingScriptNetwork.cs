@@ -9,8 +9,8 @@ using Photon.Pun;
 // This Script represents the enemy shooting.
 public class ShootingScriptNetwork : MonoBehaviour
 {
-
-    [SerializeField] PhotonView photonView;
+    [SerializeField]
+    PhotonView photonView;
 
     [SerializeField]
     private GameObject BulletObject;
@@ -33,22 +33,22 @@ public class ShootingScriptNetwork : MonoBehaviour
     [SerializeField]
     private AudioClip missSoundEffect;
 
-/*    [SerializeField] private PlayerController playerController;*/
+    /*    [SerializeField] private PlayerController playerController;*/
 
     private GameObject currentTarget;
 
-    private void Start() {
-        
-
-        targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManagerNetWork>();
+    private void Start()
+    {
+        targetsManager = GameObject
+            .FindGameObjectWithTag("TargetsManager")
+            .GetComponent<TargetsManagerNetWork>();
     }
 
     void Update()
     {
-    
         //if not the player of the machine we using.
-        if (!photonView.IsMine) return;
-
+        if (!photonView.IsMine)
+            return;
 
         string pressedKey = Input.inputString; //get the pressed key
         if (string.IsNullOrEmpty(pressedKey) || targetsManager.Count == 0)
@@ -81,8 +81,6 @@ public class ShootingScriptNetwork : MonoBehaviour
             KeyboardLanguageChanger.ChangeKeyboardLanguage();
     }
 
-
-
     GameObject LockOnTarget(string pressedKey)
     {
         return currentTarget = targetsManager.FindTarget(gameObject, pressedKey.First());
@@ -107,7 +105,8 @@ public class ShootingScriptNetwork : MonoBehaviour
     [PunRPC]
     private void ShootRPC()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine)
+            return;
         StartShootEffect();
         Vector3 positionOfSpawnedObject = new Vector3(
             transform.position.x,
@@ -115,18 +114,17 @@ public class ShootingScriptNetwork : MonoBehaviour
             transform.position.z
         );
 
-        GameObject newBullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "BulletNetWork"), positionOfSpawnedObject, Quaternion.identity);
+        GameObject newBullet = PhotonNetwork.Instantiate(
+            Path.Combine("PhotonPrefabs", "BulletNetWork"),
+            positionOfSpawnedObject,
+            Quaternion.identity
+        );
 
         // set the target for the bullet
-
         TargetMover newObjectMover = newBullet.GetComponent<TargetMover>();
         if (newObjectMover)
             newObjectMover.setTarget(currentTarget);
-           
-        /*  photonView.RPC("UpdateTargetRPC", RpcTarget.All, newBullet.GetComponent<PhotonView>().ViewID);*/
-        // play sound
         playShootSound();
-
     }
 
     private void StartShootEffect()
@@ -139,16 +137,13 @@ public class ShootingScriptNetwork : MonoBehaviour
         obj.transform.parent = transform;
     }
 
-
-
-
     private void playShootSound()
     {
         AudioSource.PlayClipAtPoint(shootSoundEffect, transform.position);
     }
+
     private void playMissSound()
     {
         AudioSource.PlayClipAtPoint(missSoundEffect, transform.position);
     }
-
 }
