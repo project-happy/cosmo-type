@@ -3,7 +3,7 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField]
-    private Transform playerTransform;
+    public Transform playerTransform;
 
     [SerializeField]
     private float initialSpeed = 0.3f;

@@ -87,7 +87,7 @@ public class TargetsManager : MonoBehaviour
         {
             obj = Instantiate(enemy, new Vector3(UnityEngine.Random.Range(1, 11), UnityEngine.Random.Range(1, 11)), Quaternion.identity);
             mover = obj.GetComponent<Mover>();
-            //mover.target = player;
+            mover.playerTransform = player;
             textType = obj.GetComponent<TextType>();
             textType.SetWords(new List<Word> { word });
             targets.Add(obj);
