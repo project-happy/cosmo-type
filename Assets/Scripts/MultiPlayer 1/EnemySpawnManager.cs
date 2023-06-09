@@ -5,6 +5,7 @@ using Photon.Pun;
 using System.IO;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 /*[System.Serializable]
 public class WordDataList
@@ -45,7 +46,7 @@ public class EnemySpawnManager : MonoBehaviour
         }
     }
 
-    private async Task<List<Word>> LoadWordsFromFile(string filename)
+    private async Task<List<List<Word>>> LoadWordsFromFile(string filename)
     {
         filename = string.Join("/", Application.streamingAssetsPath, filename);
 
@@ -68,7 +69,7 @@ public class EnemySpawnManager : MonoBehaviour
 #endif
 
         // Deserialize the JSON data into a list of WordData objects
-        return JsonUtility.FromJson<WordDataList>(jsonString).words;
+        return JsonUtility.FromJson<WordDataList>(jsonString).words.Select(s => s.word).ToList();
     }
 
     //private List<Word> LoadWordsFromFile(string filename)
@@ -83,20 +84,20 @@ public class EnemySpawnManager : MonoBehaviour
 
     public async Task SpawnTargets()
     {
-        List<Word> words = await LoadWordsFromFile("words-en.json");
+        List<List<Word>> words = await LoadWordsFromFile("words-en.json");
         targets = new List<GameObject>();
         StartCoroutine(SpawnRoutine(words));
     }
 
     //spawn the enemies at random spawn points.
 
-    IEnumerator SpawnRoutine(List<Word> words)
+    IEnumerator SpawnRoutine(List<List<Word>> words)
     {
         GameObject obj;
         TextTypeNetwork textType;
         int delay = 1;
 
-        foreach (Word word in words)
+        foreach (List<Word> wordList in words)
         {
             Vector3 randomPostion = spawnPoints[
                 UnityEngine.Random.Range(0, spawnPoints.Length)
@@ -108,7 +109,7 @@ public class EnemySpawnManager : MonoBehaviour
             );
 
             textType = obj.GetComponent<TextTypeNetwork>();
-            textType.SetWords(new List<Word> { word });
+            textType.SetWords(wordList);
             photonView.RPC("AddTarget", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
 
             yield return new WaitUntil(() => targets.Count != _targetsAllowed);

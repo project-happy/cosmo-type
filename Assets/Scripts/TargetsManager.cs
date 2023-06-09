@@ -1,17 +1,42 @@
-using Assets;
-using System;
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
+using static UnityEngine.GraphicsBuffer;
 
 [System.Serializable]
 public class WordDataList
 {
-    public List<Word> words;
+    public List<InnerWord> words;
 }
+
+[System.Serializable]
+public class InnerWord
+{
+    public List<Word> word;
+    public EnemyType type;
+}
+
+public enum EnemyType
+{
+    REGULAR,
+    BOSS,
+}
+
+public enum ModeType
+{
+    [Description("normal-mode")]
+    NORMAL,
+
+    [Description("learning-mode")]
+    LEARNING,
+
+    [Description("story-mode")]
+    STORY,
+}
+
 
 public class TargetsManager : MonoBehaviour
 {
@@ -19,83 +44,160 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] GameObject enemy;
 
-    [SerializeField] List<GameObject> targets;
+    [SerializeField] GameObject boss;
 
-    [SerializeField] bool ranodomSpawn;
+    [SerializeField] GUIMeshText textUI;
+
+    [SerializeField] private int wave = 1;
+
+    [SerializeField] List<Transform> spawners;
+
+    [SerializeField] float maxSpawnHDistance = 3f;
+    
+    [SerializeField] float maxSpawnVDistance = 3f;
+
+    [SerializeField] ModeType mode;
+
+    [SerializeField] float spawnDelay = 2f;
 
     public int Count { get { return targets.Count; } }
 
-    public static event Action<GameObject> OnTargetRemoved;
 
+    private List<GameObject> targets;
+
+
+    private float minSpawnDelay = .37f;
+
+    private IList<InnerWord> loadedWords;
+
+    private bool isUIMessageDiplayed = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        SpawnTargets();
+        targets = new List<GameObject>();
+        StartCoroutine(SpawnTargets());
     }
 
 
-
-    private async Task<List<Word>> LoadWordsFromFile(string filename)
+    // Loading words from json file
+    private IEnumerator LoadWordsFromFile(string filename)
     {
-        filename = string.Join("/", Application.streamingAssetsPath, filename);
+        filename = string.Join("/", Application.streamingAssetsPath, "JsonFiles", mode.DisplayName(), filename);
 
         // In the Unity Editor, you need to use a different file access method
 
 #if UNITY_EDITOR
-
+        Debug.Log(filename);
         // Read the JSON file
         string jsonString = System.IO.File.ReadAllText(filename);
 
 #else
         // In a built game, you need to use Unity's WWW or UnityWebRequest classes to read the file
         UnityWebRequest www = UnityWebRequest.Get(filename);
-        var operation = www.SendWebRequest();
-
-        while (!operation.isDone)
-            await Task.Yield();
+        yield return www.SendWebRequest();
 
         string jsonString = www.downloadHandler.text;
 #endif
 
-
         // Deserialize the JSON data into a list of WordData objects
-        return JsonUtility.FromJson<WordDataList>(jsonString).words;
+        yield return loadedWords = JsonUtility.FromJson<WordDataList>(jsonString).words;
+        //.Shuffle();
     }
 
-
-
-    public async Task SpawnTargets()
+    private IEnumerator SpawnTargets()
     {
-
-        List<Word> words = await LoadWordsFromFile("words-en.json");
-        targets = new List<GameObject>();
-        StartCoroutine(SpawnRoutine(words));
-    }
-
-
-
-    int _targetsAllowed = 1;
-    IEnumerator SpawnRoutine(List<Word> words)
-    {
-        GameObject obj;
-        TextType textType;
-        int delay = 1;
-        Mover mover;
-
-        foreach (Word word in words)
+        while (true)
         {
-            obj = Instantiate(enemy, new Vector3(UnityEngine.Random.Range(1, 11), UnityEngine.Random.Range(1, 11)), Quaternion.identity);
-            mover = obj.GetComponent<Mover>();
-            mover.playerTransform = player;
-            textType = obj.GetComponent<TextType>();
-            textType.SetWords(new List<Word> { word });
-            targets.Add(obj);
+            // display wave started
+            isUIMessageDiplayed = true;
+            StartCoroutine(UpdaeUI($"Wave {wave} started"));
+            yield return new WaitUntil(() => !isUIMessageDiplayed);
 
-            yield return new WaitUntil(() => targets.Count != _targetsAllowed);
+            // load words
+            StartCoroutine(LoadWordsFromFile($"wave-{wave}.json"));
+            yield return new WaitUntil(() => loadedWords != null);
+
+            // spawn enemies
+            StartCoroutine(Spawn());
+            yield return new WaitUntil(() => loadedWords.Count == 0);
+            yield return new WaitUntil(() => targets.Count == 0);
+
+            // show animation for ending rouund and wait 
+            yield return new WaitForSeconds(1);
+
+            loadedWords = null;
+            wave++;
+            spawnDelay = Mathf.Clamp(spawnDelay - .3f, minSpawnDelay, float.MaxValue);
         }
     }
 
+
+    IEnumerator UpdaeUI(string message)
+    {
+
+        textUI.UpdateText(message);
+        yield return new WaitForSeconds(2);
+        textUI.Clear();
+        isUIMessageDiplayed = false;
+    }
+
+    IEnumerator Spawn()
+    {
+        InnerWord wordObj;
+        while (loadedWords.Count > 0)
+        {
+            wordObj = loadedWords.First();
+            Debug.Log($"Spawned word {wordObj.word.First().text}");
+
+            // pick a spawner 
+            Vector3 spawnPosition = GetRandomSpawnPosition();//spawners[Random.Range(0, spawners.Count)].position;
+
+            if (wordObj.type == EnemyType.BOSS)
+            {
+                // set targets 
+                GameObject boss = SpawnEnemy(new List<Word> { wordObj.word.First() }, wordObj.type, spawnPosition);
+                PositionSpawner spawner = boss.GetComponent<PositionSpawner>();
+                spawner.words = wordObj.word.GetRange(1, wordObj.word.Count - 1);
+            }
+            else
+            {
+                SpawnEnemy(wordObj.word, wordObj.type, spawnPosition);
+            }
+            yield return new WaitForSeconds(spawnDelay);
+            loadedWords.Remove(wordObj);
+        }
+    }
+
+
+    Vector3 GetRandomSpawnPosition()
+    {
+        float x = Random.Range(transform.position.x - maxSpawnHDistance, transform.position.x + maxSpawnHDistance);
+        float y = Random.Range(transform.position.y - maxSpawnVDistance, transform.position.y + maxSpawnVDistance);
+        return new Vector3(x, y);
+    }
+
+    GameObject GetEnemyByType(EnemyType type)
+    {
+        if (type == EnemyType.BOSS)
+            return boss;
+
+        return enemy;
+    }
+
+    public GameObject SpawnEnemy(List<Word> words, EnemyType type, Vector3 positon)
+    {
+        GameObject obj;
+        TextType textType;
+        Mover mover;
+        obj = Instantiate(GetEnemyByType(type), positon, Quaternion.identity);
+        mover = obj.GetComponent<Mover>();
+        mover.playerTransform = player;
+        textType = obj.GetComponent<TextType>();
+        textType.SetWords(words);
+        targets.Add(obj);
+        return obj;
+    }
 
 
     // find the next target with min distance to the gameobject that starts with char that we first typed
@@ -123,9 +225,10 @@ public class TargetsManager : MonoBehaviour
     public void RemoveTarget(GameObject gameObject)
     {
         targets.Remove(gameObject);
-        OnTargetRemoved?.Invoke(gameObject);
-        _targetsAllowed++;
     }
 
-
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireCube(transform.position, new Vector3(maxSpawnHDistance * 2, maxSpawnVDistance * 2, 0));
+    }
 }

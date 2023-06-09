@@ -20,16 +20,51 @@ public class Mover : MonoBehaviour
     private Rigidbody2D rb;
     private float currentSpeed;
 
+    private Vector3 initialTarget;
+
+    private bool isSnappedToTragget = false;
+
+    private Vector3 currentTarget;
+
+    public float Dist() => Vector3.Distance(transform.position, playerTransform.position);
+
+    public float DistFromCenter() => Mathf.Abs(Camera.main.transform.position.y - transform.position.y);
+
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentSpeed = initialSpeed;
+        initialTarget = new Vector3(
+            Random.Range(Camera.main.transform.position.x - 8, Camera.main.transform.position.x + 8),
+            Random.Range(transform.position.y, Camera.main.transform.position.y));
+        currentTarget = playerTransform.position;
+    }
+
+    private void OnEnable()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+    }
+
+    private void OnDisable()
+    {
+        rb.bodyType = RigidbodyType2D.Static;
     }
 
     private void FixedUpdate()
     {
+
+        //if (!isSnappedToTragget && Vector3.Distance(transform.position, currentTarget) < 8)
+        //{
+        //    isSnappedToTragget = true;
+        //    // move to player
+        //    currentTarget = playerTransform.position;
+        //}
+
+
         // Calculate direction from the ship to the player
-        Vector3 direction = playerTransform.position - transform.position;
+        Vector3 direction = currentTarget - transform.position;
 
         // Normalize the direction vector
         direction.Normalize();

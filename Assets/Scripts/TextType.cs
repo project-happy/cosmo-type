@@ -33,7 +33,6 @@ public class TextType : MonoBehaviour
     [SerializeField] private List<Word> words;
     [SerializeField] private AudioClip expSoundEffect;
     [SerializeField] private GameObject hit_effect;
-    /*    [SerializeField] private explosion*/
 
 
     private int currentWordLength;
@@ -132,6 +131,7 @@ public class TextType : MonoBehaviour
             {
                 currentWordLength = words.First().text.Length;
                 text.UpdateText(words.First());
+                KeyboardLanguageChanger.ChangeKeyboardLanguage(words.First().lang);
             }
         }
     }
