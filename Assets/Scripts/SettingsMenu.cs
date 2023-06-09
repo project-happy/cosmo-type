@@ -35,7 +35,7 @@ public class SettingsMenu : MonoBehaviour
         if (!PlayerPrefs.HasKey("musicVolume"))
         {
             Save(fullVolume);
-            Load();
+          /*  Load();*/
         }
         else
         {

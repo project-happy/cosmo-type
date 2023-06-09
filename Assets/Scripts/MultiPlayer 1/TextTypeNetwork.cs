@@ -21,26 +21,39 @@ public class Word
 
 public class TextTypeNetwork : MonoBehaviour
 {
-    [SerializeField] MeshText text;
+    [SerializeField]
+    MeshText text;
 
-    [SerializeField] string triggerTag;
+    [SerializeField]
+    string triggerTag;
 
-    [SerializeField] GameObject explosion;
+    [SerializeField]
+    GameObject explosion;
 
-    [SerializeField] float explosionDestroyDelay = 0.75f;
+    [SerializeField]
+    float explosionDestroyDelay = 0.75f;
 
-    [SerializeField] private PlayerController playerController;
-    [SerializeField] private Mover shipMover;
+    [SerializeField]
+    private PlayerController playerController;
 
-    [SerializeField] private List<Word> words;
-    [SerializeField] private AudioClip expSoundEffect;
-    [SerializeField] private GameObject hit_effect;
+    [SerializeField]
+    private Mover shipMover;
+
+    [SerializeField]
+    private List<Word> words;
+
+    [SerializeField]
+    private AudioClip expSoundEffect;
+
+    [SerializeField]
+    private GameObject hit_effect;
+
     /*    [SerializeField] private explosion*/
     [SerializeField]
     private TargetsManagerNetWork targetsManager;
 
-    [SerializeField] private PhotonView photonView;
-
+    [SerializeField]
+    private PhotonView photonView;
 
     public bool isTaken { get; set; } = false;
     private int currentWordLength;
@@ -49,16 +62,16 @@ public class TextTypeNetwork : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-
     {
-
         shipMover = GetComponent<Mover>();
 
-        targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManagerNetWork>();
+        targetsManager = GameObject
+            .FindGameObjectWithTag("TargetsManager")
+            .GetComponent<TargetsManagerNetWork>();
 
         if (words.Count > 0)
         {
-            // use words list object 
+            // use words list object
             SetWords(words);
         }
         else
@@ -66,23 +79,25 @@ public class TextTypeNetwork : MonoBehaviour
             // use the current word on the text object
             words = new List<Word>
             {
-                new Word { text = text.currentText, isRTL = false , lang ="en" }
+                new Word
+                {
+                    text = text.currentText,
+                    isRTL = false,
+                    lang = "en"
+                }
             };
             SetWords(words);
         }
     }
 
-
-
-
     public void SetWords(List<Word> words)
     {
-
         string json = JsonUtility.ToJson(new WordsData { Words = words });
 
         // Add an RPC call to synchronize the words across all players
         photonView.RPC("SetWordsRPC", RpcTarget.AllBuffered, json);
     }
+
     [Serializable]
     private class WordsData
     {
@@ -103,20 +118,19 @@ public class TextTypeNetwork : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag != triggerTag) return;
+        if (other.gameObject.tag != triggerTag)
+            return;
 
         // if the bullet target is not this object then ignore
         TargetMover targetMover = other.GetComponent<TargetMover>();
-        if (targetMover == null || targetMover.target != gameObject) return;
+        if (targetMover == null || targetMover.target != gameObject)
+            return;
 
         OnHit(other.gameObject);
     }
 
-
-
     protected virtual void OnHit(GameObject other)
     {
-
         photonView.RPC("OnHitRPC", RpcTarget.All, other.GetComponent<PhotonView>().ViewID);
     }
 
@@ -133,13 +147,10 @@ public class TextTypeNetwork : MonoBehaviour
         shipMover.MoveUp();
         if (health == 0)
             ExplodeAndDestroy();
-
     }
-
 
     protected void ExplodeAndDestroy()
     {
-
         if (photonView.IsMine)
         {
             targetsManager.RemoveTarget(gameObject);
@@ -148,14 +159,11 @@ public class TextTypeNetwork : MonoBehaviour
         {
             PhotonNetwork.Destroy(gameObject);
         }
- 
     }
-
 
     public void RemoveFirstChar()
     {
         photonView.RPC("RemoveFirstCharRPC", RpcTarget.All);
-
     }
 
     [PunRPC]
@@ -177,32 +185,22 @@ public class TextTypeNetwork : MonoBehaviour
         }
     }
 
-
-
-
-
     public char FirstChar() => fullText.First();
 
     public void ChangeCurrentWordColor()
     {
         photonView.RPC("ChangeCurrentWordColorRPC", RpcTarget.All);
-
     }
 
     [PunRPC]
-
     public void ChangeCurrentWordColorRPC()
     {
         text.ChangeColor(Color.yellow);
     }
 
-   
-
-
     // this returns the current full text length
-    public int FullTextLength { get { return fullText.Length; } }
-
-
-
-
+    public int FullTextLength
+    {
+        get { return fullText.Length; }
+    }
 }

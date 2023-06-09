@@ -7,11 +7,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 
-/*[System.Serializable]
-public class WordDataList
-{
-    public List<Word> words;
-}*/
+// this class represents the spawn of enemies in the game
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -72,16 +68,6 @@ public class EnemySpawnManager : MonoBehaviour
         return JsonUtility.FromJson<WordDataList>(jsonString).words.Select(s => s.word).ToList();
     }
 
-    //private List<Word> LoadWordsFromFile(string filename)
-    //{
-    //    // Read the JSON file
-    //    string jsonString = System.IO.File.ReadAllText(filename);
-
-    //    // Deserialize the JSON data into a list of WordData objects
-    //    List<Word> words = JsonUtility.FromJson<WordDataList>(jsonString).words;
-    //    return words;
-    //}
-
     public async Task SpawnTargets()
     {
         List<List<Word>> words = await LoadWordsFromFile("words-en.json");
@@ -130,6 +116,7 @@ public class EnemySpawnManager : MonoBehaviour
         return targets;
     }
 
+    //remove target from the game
     public void RemoveTarget(GameObject target)
     {
         targets.Remove(target);

@@ -1,4 +1,4 @@
-# WordsType
+# Cosmo Tpye multiplayer
 
 
 #Unity Version: 2021.3.21f1
@@ -21,9 +21,9 @@
 </br>
 
 ## itch.io
-
+https://wissam111.itch.io/cosmo-type
 - ProfileLink:- https://wissam111.itch.io/
-- GameLink:- https://wissam111.itch.io/wordstype
+- GameLink:- https://wissam111.itch.io/cosmo-type
 
 </br>
 
