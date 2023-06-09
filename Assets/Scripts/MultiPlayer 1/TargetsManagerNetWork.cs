@@ -17,19 +17,18 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-
         enemySpawnerManager = GameObject.FindGameObjectWithTag("EnemySpawnManager").GetComponent<EnemySpawnManager>();
-
     }
+
+
+
 
     public GameObject? FindTarget(GameObject gameObj, char searchChar)
     {
 
         MeshText enemyText;
         float minDist = float.MaxValue;
-        GameObject? target = null;
-
-
+        GameObject target = null;
         List<GameObject> targets = enemySpawnerManager.GetTargets();
         foreach (GameObject enemy in targets)
         {

@@ -13,7 +13,7 @@ EditorBuildSettings:
     guid: 497db1cc20e48aa49861fd8364d10343
   - enabled: 1
     path: Assets/Scenes/MutliDemo/MultiLobby.unity
-    guid: 121edafd08d6f79408763663f935b709
+    guid: 1075df06fe3700d408d80bf8aa923e66
   - enabled: 1
     path: Assets/Scenes/MutliDemo/MultiDemo.unity
     guid: 6238309cd49f898409da6de2e8377b4b

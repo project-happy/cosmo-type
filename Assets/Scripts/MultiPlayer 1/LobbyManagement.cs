@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 
 public class LobbyManagement : MonoBehaviourPunCallbacks
@@ -14,6 +15,8 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 2;
         PhotonNetwork.CreateRoom(createInput.text);
     }
 

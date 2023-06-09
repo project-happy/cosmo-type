@@ -22,6 +22,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     [SerializeField] bool ranodomSpawn;
 
+    int _targetsAllowed = 1;
 
     [SerializeField] private PhotonView photonView;
 
@@ -32,6 +33,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.IsMasterClient)
         {
             SpawnTargets();
@@ -40,10 +42,11 @@ public class EnemySpawnManager : MonoBehaviour
     }
 
 
+    //read the words from a text file.
     private List<Word> LoadWordsFromFile(string filename)
     {
-        // Read the JSON file
         string jsonString = System.IO.File.ReadAllText(filename);
+
 
         // Deserialize the JSON data into a list of WordData objects
         List<Word> words = JsonUtility.FromJson<WordDataList>(jsonString).words;
@@ -52,19 +55,17 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void SpawnTargets()
     {
-        List<Word> words = LoadWordsFromFile("Assets/words-en.json");
+        List<Word> words = LoadWordsFromFile("assets/words-en.json");
         targets = new List<GameObject>();
         StartCoroutine(SpawnRoutine(words));
     }
 
 
 
+    //spawn the enemies at random spawn points.
 
-    int _targetsAllowed = 1;
     IEnumerator SpawnRoutine(List<Word> words)
     {
-
-
         GameObject obj;
         TextTypeNetwork textType;
         int delay = 1;
@@ -76,8 +77,7 @@ public class EnemySpawnManager : MonoBehaviour
 
             textType = obj.GetComponent<TextTypeNetwork>();
             textType.SetWords(new List<Word> { word });
-            /*     targets.Add(obj);*/
-            photonView.RPC("AddTarget", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
+            photonView.RPC("AddTarget", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID); 
 
             yield return new WaitUntil(() => targets.Count != _targetsAllowed);
         }
@@ -86,6 +86,9 @@ public class EnemySpawnManager : MonoBehaviour
 
 
 
+
+
+    // send rpc, that new target has been added to the game.
 
     [PunRPC]
     private void AddTarget(int viewID)

@@ -5,14 +5,14 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
     void Start()
     {
-
         Connect();
     }
 
 
+
+    //connect to the server
     private void Connect()
     {
         PhotonNetwork.ConnectUsingSettings();

@@ -45,10 +45,12 @@ public class ShootingScriptNetwork : MonoBehaviour
 
     void Update()
     {
+    
         //if not the player of the machine we using.
         if (!photonView.IsMine) return;
+
+
         string pressedKey = Input.inputString; //get the pressed key
-        
         if (string.IsNullOrEmpty(pressedKey) || targetsManager.Count == 0)
             return;
         // Find a new target if we dont have one already
@@ -127,18 +129,6 @@ public class ShootingScriptNetwork : MonoBehaviour
 
     }
 
-    private void playShootSound()
-    {
-        AudioSource.PlayClipAtPoint(shootSoundEffect, transform.position);
-    }
-
-
-
-    private void playMissSound()
-    {
-        AudioSource.PlayClipAtPoint(missSoundEffect, transform.position);
-    }
-
     private void StartShootEffect()
     {
         GameObject obj = (GameObject)Instantiate(
@@ -148,4 +138,17 @@ public class ShootingScriptNetwork : MonoBehaviour
         ); //Spawn muzzle flash
         obj.transform.parent = transform;
     }
+
+
+
+
+    private void playShootSound()
+    {
+        AudioSource.PlayClipAtPoint(shootSoundEffect, transform.position);
+    }
+    private void playMissSound()
+    {
+        AudioSource.PlayClipAtPoint(missSoundEffect, transform.position);
+    }
+
 }
