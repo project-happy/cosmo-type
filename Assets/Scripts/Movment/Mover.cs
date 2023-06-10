@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class Mover : MonoBehaviour
 {
@@ -30,6 +31,11 @@ public class Mover : MonoBehaviour
 
     public float DistFromCenter() => Mathf.Abs(Camera.main.transform.position.y - transform.position.y);
 
+    private void OnDisable()
+    {
+        rb.velocity = new Vector3();
+    }
+
 
     private void Start()
     {
@@ -39,17 +45,6 @@ public class Mover : MonoBehaviour
             Random.Range(Camera.main.transform.position.x - 8, Camera.main.transform.position.x + 8),
             Random.Range(transform.position.y, Camera.main.transform.position.y));
         currentTarget = playerTransform.position;
-    }
-
-    private void OnEnable()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
-    }
-
-    private void OnDisable()
-    {
-        rb.bodyType = RigidbodyType2D.Static;
     }
 
     private void FixedUpdate()
@@ -83,4 +78,7 @@ public class Mover : MonoBehaviour
         direction.Normalize();
         transform.position -= direction * hitMovementDistance;
     }
+
+
+
 }

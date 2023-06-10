@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 using static UnityEngine.GraphicsBuffer;
 
 [System.Serializable]
@@ -63,14 +64,19 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] float spawnDelay = 2f;
 
+    [SerializeField] private float minSpawnDelay = .2f;
+
     [SerializeField] bool shuffleWords = true;
+
+    [SerializeField] int maxParrallelEnemies = 14;
+
+    [SerializeField] int currentParrallelEnemiesLimit = 6;
 
     [SerializeField] private List<GameObject> targets;
     public int Count { get { return targets.Count; } }
 
 
 
-    private float minSpawnDelay = .37f;
 
     private IList<InnerWord> loadedWords;
 
@@ -135,7 +141,8 @@ public class TargetsManager : MonoBehaviour
 
             loadedWords = null;
             wave++;
-            spawnDelay = Mathf.Clamp(spawnDelay - .3f, minSpawnDelay, float.MaxValue);
+            spawnDelay = Mathf.Clamp(spawnDelay - .4f, minSpawnDelay, float.MaxValue);
+            currentParrallelEnemiesLimit = Mathf.Clamp(currentParrallelEnemiesLimit + 2, 1, maxParrallelEnemies);
         }
     }
 
@@ -173,6 +180,9 @@ public class TargetsManager : MonoBehaviour
             }
             yield return new WaitForSeconds(spawnDelay);
             loadedWords.Remove(wordObj);
+
+            // limit parrallel enemies
+            yield return new WaitUntil(() => currentParrallelEnemiesLimit > targets.Count);
         }
     }
 
