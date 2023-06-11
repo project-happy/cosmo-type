@@ -44,11 +44,18 @@ public class TextType : MonoBehaviour
     private AudioClip expSoundEffect;
 
     [SerializeField]
+    TargetsManager targetsManager;
+
+    [SerializeField]
+    private List<Word> words;
+
+    [SerializeField]
+    private AudioClip expSoundEffect;
+
+    [SerializeField]
     private GameObject hit_effect;
 
-    /*    [SerializeField] private explosion*/
-
-
+    private Mover shipMover;
     private int currentWordLength;
     private string fullText;
     private int health;
@@ -145,6 +152,7 @@ public class TextType : MonoBehaviour
             {
                 currentWordLength = words.First().text.Length;
                 text.UpdateText(words.First());
+                KeyboardLanguageChanger.ChangeKeyboardLanguage(words.First().lang);
             }
         }
     }

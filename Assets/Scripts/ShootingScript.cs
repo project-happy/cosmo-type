@@ -29,12 +29,17 @@ public class ShootingScript : MonoBehaviour
 
     private GameObject currentTarget;
 
-    private void Start() { }
+
+    void Start()
+    {
+        // change to defualt keyboard
+        KeyboardLanguageChanger.ChangeKeyboardLanguage();
+    }
+
 
     void Update()
     {
         string pressedKey = Input.inputString; //get the pressed key
-
         if (string.IsNullOrEmpty(pressedKey) || targetsManager.Count == 0)
             return;
 

@@ -2,19 +2,18 @@ using Assets.Scripts;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(TextMeshPro))]
-public class MeshText : MonoBehaviour
+[RequireComponent(typeof(TextMeshProUGUI))]
+public class GUIMeshText : MonoBehaviour
 {
     public string currentText { get; private set; } = "";
-    TextMeshPro _text;
+    TextMeshProUGUI _text;
 
     public int Length { get { return currentText.Length; } }
 
     private void OnEnable()
     {
-        _text = GetComponent<TextMeshPro>();
+        _text = GetComponent<TextMeshProUGUI>();
         currentText = _text.text;
     }
 

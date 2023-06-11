@@ -542,7 +542,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 760cf9795ffa39e4e91d7f802bd42a19, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.114
+  m_Volume: 0.299
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1157,15 +1157,17 @@ MonoBehaviour:
   boss: {fileID: 1502308913731659361, guid: b4bf00bea248d8644844de49e23f026b, type: 3}
   textUI: {fileID: 130289572}
   wave: 1
+  spawners:
+  - {fileID: 1005360655}
+  - {fileID: 1595995357}
+  - {fileID: 1614365112}
+  - {fileID: 1193803759}
+  - {fileID: 1269142907}
+  - {fileID: 1998129140}
   maxSpawnHDistance: 18
   maxSpawnVDistance: 0.28
-  mode: 0
-  spawnDelay: 2.4
-  minSpawnDelay: 0.37
-  shuffleWords: 1
-  maxParrallelEnemies: 12
-  currentParrallelEnemiesLimit: 6
-  targets: []
+  mode: 1
+  spawnDelay: 7
 --- !u!1 &1193803758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,10 +1457,6 @@ PrefabInstance:
     - target: {fileID: 1691507487262433381, guid: 38efa7b53cef8e4438dbf04d3cb11bce, type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3923098015552755379, guid: 38efa7b53cef8e4438dbf04d3cb11bce, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4394804683827637243, guid: 38efa7b53cef8e4438dbf04d3cb11bce, type: 3}
       propertyPath: targetsManager
