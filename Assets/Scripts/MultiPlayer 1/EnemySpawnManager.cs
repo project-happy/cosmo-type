@@ -73,6 +73,7 @@ public class EnemySpawnManager : MonoBehaviour
     {
         List<List<Word>> words = await LoadWordsFromFile("words-en.json");
         targets = new List<GameObject>();
+        Debug.Log(words);
         StartCoroutine(SpawnRoutine(words));
     }
 

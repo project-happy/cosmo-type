@@ -41,26 +41,46 @@ public enum ModeType
     TUTORIAL,
 }
 
+
 public class TargetsManager : MonoBehaviour
 {
-    [SerializeField]
-    Transform player;
+    [SerializeField] Transform player;
 
-    [SerializeField]
-    GameObject enemy;
+    [SerializeField] GameObject enemy;
 
-    [SerializeField]
-    List<GameObject> targets;
+    [SerializeField] GameObject boss;
 
-    [SerializeField]
-    int currentParrallelEnemiesLimit = 6;
+    [SerializeField] GUIMeshText textUI;
 
-    [SerializeField]
-    private List<GameObject> targets;
-    public int Count
-    {
-        get { return targets.Count; }
-    }
+    [SerializeField] private int wave = 1;
+
+    //[SerializeField] List<Transform> spawners;
+
+    [SerializeField] float maxSpawnHDistance = 3f;
+
+    [SerializeField] float maxSpawnVDistance = 3f;
+
+    [SerializeField] ModeType mode;
+
+    [SerializeField] float spawnDelay = 2f;
+
+    [SerializeField] private float minSpawnDelay = .2f;
+
+    [SerializeField] bool shuffleWords = true;
+
+    [SerializeField] int maxParrallelEnemies = 14;
+
+    [SerializeField] int currentParrallelEnemiesLimit = 6;
+
+    [SerializeField] private List<GameObject> targets;
+    public int Count { get { return targets.Count; } }
+
+
+
+
+    private IList<InnerWord> loadedWords;
+
+    private bool isUIMessageDiplayed = true;
 
     // Start is called before the first frame update
     void Start()
@@ -71,16 +91,11 @@ public class TargetsManager : MonoBehaviour
         StartCoroutine(SpawnTargets());
     }
 
+
     // Loading words from json file
     private IEnumerator LoadWordsFromFile(string filename)
     {
-        filename = string.Join(
-            "/",
-            Application.streamingAssetsPath,
-            "JsonFiles",
-            mode.DisplayName(),
-            filename
-        );
+        filename = string.Join("/", Application.streamingAssetsPath, "JsonFiles", mode.DisplayName(), filename);
 
         // In the Unity Editor, you need to use a different file access method
 
@@ -121,30 +136,72 @@ public class TargetsManager : MonoBehaviour
             yield return new WaitUntil(() => loadedWords.Count == 0);
             yield return new WaitUntil(() => targets.Count == 0);
 
-            // show animation for ending rouund and wait
+            // show animation for ending rouund and wait 
             yield return new WaitForSeconds(3);
 
             loadedWords = null;
             wave++;
             spawnDelay = Mathf.Clamp(spawnDelay - .4f, minSpawnDelay, float.MaxValue);
-            currentParrallelEnemiesLimit = Mathf.Clamp(
-                currentParrallelEnemiesLimit + 2,
-                1,
-                maxParrallelEnemies
-            );
+            currentParrallelEnemiesLimit = Mathf.Clamp(currentParrallelEnemiesLimit + 2, 1, maxParrallelEnemies);
         }
     }
 
+
     IEnumerator UpdaeUI(string message)
     {
-        List<Word> words = await LoadWordsFromFile("words-en.json");
-        targets = new List<GameObject>();
-        StartCoroutine(SpawnRoutine(words));
+
+        textUI.UpdateText(message);
+        yield return new WaitForSeconds(2);
+        textUI.Clear();
+        isUIMessageDiplayed = false;
     }
 
-    int _targetsAllowed = 1;
+    protected virtual IEnumerator Spawn()
+    {
+        InnerWord wordObj;
+        while (loadedWords.Count > 0)
+        {
+            wordObj = loadedWords.First();
+            Debug.Log($"Spawned word {wordObj.word.First().text}");
 
-    IEnumerator SpawnRoutine(List<Word> words)
+            // pick a spawner 
+            Vector3 spawnPosition = GetRandomSpawnPosition();//spawners[Random.Range(0, spawners.Count)].position;
+
+            if (wordObj.type == EnemyType.BOSS)
+            {
+                // set targets 
+                GameObject boss = SpawnEnemy(new List<Word> { wordObj.word.First() }, wordObj.type, spawnPosition);
+                PositionSpawner spawner = boss.GetComponent<PositionSpawner>();
+                spawner.words = wordObj.word.GetRange(1, wordObj.word.Count - 1);
+            }
+            else
+            {
+                SpawnEnemy(wordObj.word, wordObj.type, spawnPosition);
+            }
+            yield return new WaitForSeconds(spawnDelay);
+            loadedWords.Remove(wordObj);
+
+            // limit parrallel enemies
+            yield return new WaitUntil(() => currentParrallelEnemiesLimit > targets.Count);
+        }
+    }
+
+
+    protected Vector3 GetRandomSpawnPosition()
+    {
+        float x = Random.Range(transform.position.x - maxSpawnHDistance, transform.position.x + maxSpawnHDistance);
+        float y = Random.Range(transform.position.y - maxSpawnVDistance, transform.position.y + maxSpawnVDistance);
+        return new Vector3(x, y);
+    }
+
+    protected GameObject GetEnemyByType(EnemyType type)
+    {
+        if (type == EnemyType.BOSS)
+            return boss;
+        return enemy;
+    }
+
+    public GameObject SpawnEnemy(List<Word> words, EnemyType type, Vector3 positon)
     {
         GameObject obj;
         TextType textType;
@@ -157,6 +214,7 @@ public class TargetsManager : MonoBehaviour
         targets.Add(obj);
         return obj;
     }
+
 
     // find the next target with min distance to the gameobject that starts with char that we first typed
 #nullable enable
@@ -183,5 +241,10 @@ public class TargetsManager : MonoBehaviour
     public void RemoveTarget(GameObject gameObject)
     {
         targets.Remove(gameObject);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireCube(transform.position, new Vector3(maxSpawnHDistance * 2, maxSpawnVDistance * 2, 0));
     }
 }

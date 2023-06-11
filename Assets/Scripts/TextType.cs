@@ -19,41 +19,20 @@ public class Word
 
 public class TextType : MonoBehaviour
 {
-    [SerializeField]
-    MeshText text;
+    [SerializeField] MeshText text;
 
-    [SerializeField]
-    string triggerTag;
+    [SerializeField] string triggerTag;
 
-    [SerializeField]
-    GameObject explosion;
+    [SerializeField] GameObject explosion;
 
-    [SerializeField]
-    float explosionDestroyDelay = 0.75f;
+    [SerializeField] float explosionDestroyDelay = 0.75f;
 
-    [SerializeField]
-    TargetsManager targetsManager;
+    [SerializeField] TargetsManager targetsManager;
 
-    [SerializeField]
-    private Mover shipMover;
+    [SerializeField] private List<Word> words;
+    [SerializeField] private AudioClip expSoundEffect;
+    [SerializeField] private GameObject hit_effect;
 
-    [SerializeField]
-    private List<Word> words;
-
-    [SerializeField]
-    private AudioClip expSoundEffect;
-
-    [SerializeField]
-    TargetsManager targetsManager;
-
-    [SerializeField]
-    private List<Word> words;
-
-    [SerializeField]
-    private AudioClip expSoundEffect;
-
-    [SerializeField]
-    private GameObject hit_effect;
 
     private Mover shipMover;
     private int currentWordLength;
@@ -62,16 +41,16 @@ public class TextType : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
+
     {
+
         shipMover = GetComponent<Mover>();
 
-        targetsManager = GameObject
-            .FindGameObjectWithTag("TargetsManager")
-            .GetComponent<TargetsManager>();
+        targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManager>();
 
         if (words.Count > 0)
         {
-            // use words list object
+            // use words list object 
             SetWords(words);
         }
         else
@@ -79,12 +58,7 @@ public class TextType : MonoBehaviour
             // use the current word on the text object
             words = new List<Word>
             {
-                new Word
-                {
-                    text = text.currentText,
-                    isRTL = false,
-                    lang = "en"
-                }
+                new Word { text = text.currentText, isRTL = false , lang ="en" }
             };
             SetWords(words);
         }
@@ -100,24 +74,27 @@ public class TextType : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() { }
+    void Update()
+    {
+
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag != triggerTag)
-            return;
+        if (other.gameObject.tag != triggerTag) return;
 
         // if the bullet target is not this object then ignore
         TargetMover targetMover = other.GetComponent<TargetMover>();
-        if (targetMover == null || targetMover.target != gameObject)
-            return;
+        if (targetMover == null || targetMover.target != gameObject) return;
 
         OnHit(other.gameObject);
     }
 
+
+
     protected virtual void OnHit(GameObject other)
     {
-        // Destroy Bullet
+        // Destroy Bullet 
         Destroy(other);
         health--;
         Instantiate(hit_effect, transform.position, Quaternion.identity);
@@ -125,6 +102,7 @@ public class TextType : MonoBehaviour
         if (health == 0)
             ExplodeAndDestroy();
     }
+
 
     protected void ExplodeAndDestroy()
     {
@@ -137,6 +115,7 @@ public class TextType : MonoBehaviour
         AudioSource.PlayClipAtPoint(expSoundEffect, transform.position);
         Destroy(exp, explosionDestroyDelay);
     }
+
 
     public void RemoveFirstChar()
     {
@@ -165,9 +144,7 @@ public class TextType : MonoBehaviour
         //text.ChangeFirstCharColor();
     }
 
+
     // this returns the current full text length
-    public int FullTextLength
-    {
-        get { return fullText.Length; }
-    }
+    public int FullTextLength { get { return fullText.Length; } }
 }
