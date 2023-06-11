@@ -116,8 +116,6 @@ public class ShootingScript : MonoBehaviour
         AudioSource.PlayClipAtPoint(shootSoundEffect, transform.position);
     }
 
-
-
     private void playMissSound()
     {
         AudioSource.PlayClipAtPoint(missSoundEffect, transform.position);

@@ -15,26 +15,30 @@ public class WordDataList
 
 public class TargetsManager : MonoBehaviour
 {
-    [SerializeField] Transform player;
+    [SerializeField]
+    Transform player;
 
-    [SerializeField] GameObject enemy;
+    [SerializeField]
+    GameObject enemy;
 
-    [SerializeField] List<GameObject> targets;
+    [SerializeField]
+    List<GameObject> targets;
 
-    [SerializeField] bool ranodomSpawn;
+    [SerializeField]
+    bool ranodomSpawn;
 
-    public int Count { get { return targets.Count; } }
+    public int Count
+    {
+        get { return targets.Count; }
+    }
 
     public static event Action<GameObject> OnTargetRemoved;
-
 
     // Start is called before the first frame update
     void Start()
     {
         SpawnTargets();
     }
-
-
 
     private async Task<List<Word>> LoadWordsFromFile(string filename)
     {
@@ -58,24 +62,19 @@ public class TargetsManager : MonoBehaviour
         string jsonString = www.downloadHandler.text;
 #endif
 
-
         // Deserialize the JSON data into a list of WordData objects
         return JsonUtility.FromJson<WordDataList>(jsonString).words;
     }
 
-
-
     public async Task SpawnTargets()
     {
-
         List<Word> words = await LoadWordsFromFile("words-en.json");
         targets = new List<GameObject>();
         StartCoroutine(SpawnRoutine(words));
     }
 
-
-
     int _targetsAllowed = 1;
+
     IEnumerator SpawnRoutine(List<Word> words)
     {
         GameObject obj;
@@ -85,7 +84,11 @@ public class TargetsManager : MonoBehaviour
 
         foreach (Word word in words)
         {
-            obj = Instantiate(enemy, new Vector3(UnityEngine.Random.Range(1, 11), UnityEngine.Random.Range(1, 11)), Quaternion.identity);
+            obj = Instantiate(
+                enemy,
+                new Vector3(UnityEngine.Random.Range(1, 11), UnityEngine.Random.Range(1, 11)),
+                Quaternion.identity
+            );
             mover = obj.GetComponent<Mover>();
             mover.playerTransform = player;
             textType = obj.GetComponent<TextType>();
@@ -95,8 +98,6 @@ public class TargetsManager : MonoBehaviour
             yield return new WaitUntil(() => targets.Count != _targetsAllowed);
         }
     }
-
-
 
     // find the next target with min distance to the gameobject that starts with char that we first typed
 #nullable enable
@@ -126,6 +127,4 @@ public class TargetsManager : MonoBehaviour
         OnTargetRemoved?.Invoke(gameObject);
         _targetsAllowed++;
     }
-
-
 }

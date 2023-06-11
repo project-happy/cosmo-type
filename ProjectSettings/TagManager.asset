@@ -9,6 +9,8 @@ TagManager:
   - Bullet
   - TargetsManager
   - EnemySpawnManager
+  - LobbyManagement
+  - ReadyButton
   layers:
   - Default
   - TransparentFX
