@@ -21,8 +21,8 @@ namespace Assets.Scripts
         [DllImport("user32.dll")]
         private static extern bool ActivateKeyboardLayout(IntPtr hkl, uint Flags);
 
-        //[DllImport("user32.dll")]
-        //private static extern IntPtr GetKeyboardLayout(uint idThread);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetKeyboardLayout(uint idThread);
 //#elif UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
 //        [DllImport("libx11")]
 //        private static extern IntPtr XOpenDisplay(string display_name);

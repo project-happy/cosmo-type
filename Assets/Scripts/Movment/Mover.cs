@@ -6,6 +6,8 @@ public class Mover : MonoBehaviour
     [SerializeField]
     public Transform playerTransform;
 
+    [SerializeField] float currentSpeed;
+
     [SerializeField]
     private float initialSpeed = 0.3f;
 
@@ -19,11 +21,6 @@ public class Mover : MonoBehaviour
     private float hitMovementDistance = 0.3f;
 
     private Rigidbody2D rb;
-    private float currentSpeed;
-
-    private Vector3 initialTarget;
-
-    private bool isSnappedToTragget = false;
 
     private Vector3 currentTarget;
 
@@ -41,17 +38,11 @@ public class Mover : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         currentSpeed = initialSpeed;
-        initialTarget = new Vector3(
-            Random.Range(Camera.main.transform.position.x - 8, Camera.main.transform.position.x + 8),
-            Random.Range(transform.position.y, Camera.main.transform.position.y));
         currentTarget = playerTransform.position;
     }
 
     private void FixedUpdate()
     {
-
-        
-
         // Calculate direction from the ship to the player
         Vector3 direction = currentTarget - transform.position;
 
@@ -74,5 +65,6 @@ public class Mover : MonoBehaviour
     }
 
 
+    public void SetSpeed(float speed) => currentSpeed = initialSpeed = speed;
 
 }
