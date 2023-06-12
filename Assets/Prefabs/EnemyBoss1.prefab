@@ -61,8 +61,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502308913731659361}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8944, y: 1.3004, z: 0}
-  m_LocalScale: {x: 1.839636, y: 2.0407047, z: 0.6945}
+  m_LocalPosition: {x: -3.1643, y: 0.8066, z: 0}
+  m_LocalScale: {x: 1.3661137, y: 1.5154274, z: 0.51573575}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5521796400855360297}
@@ -115,7 +115,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 859a688a03b6274409bde78f8c964d9f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a39f5d360eb38284fb54a62672b5ec9f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -143,7 +143,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.92, y: 2.3}
+    oldSize: {x: 1.14, y: 1.88}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -207,7 +207,6 @@ MonoBehaviour:
   explosion: {fileID: 100002, guid: cafecd3fc3b761c45bb1553f35cf5c96, type: 3}
   explosionDestroyDelay: 0.75
   targetsManager: {fileID: 0}
-  shipMover: {fileID: 0}
   words: []
   expSoundEffect: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
   hit_effect: {fileID: 100002, guid: cafecd3fc3b761c45bb1553f35cf5c96, type: 3}
@@ -299,7 +298,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1.42}
+  m_AnchoredPosition: {x: 0.03, y: 1.218}
   m_SizeDelta: {x: 20, y: 1.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2263709368007750400
@@ -399,8 +398,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 7.82
+  m_fontSizeBase: 7.82
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

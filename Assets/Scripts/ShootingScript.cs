@@ -32,6 +32,9 @@ public class ShootingScript : MonoBehaviour
 
     void Start()
     {
+/*        targetsManager = GameObject
+            .FindGameObjectWithTag("TargetsManager")
+            .GetComponent<TargetsManager>();*/
         // change to defualt keyboard
         KeyboardLanguageChanger.ChangeKeyboardLanguage();
     }

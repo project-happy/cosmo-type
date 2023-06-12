@@ -37,11 +37,11 @@ public class GameController : MonoBehaviour
         }
     }
 
-
     //move to the next lvl
     public void GoToNextLvl()
 
     {
+       
         if (!isTutorialCompleted)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -49,5 +49,8 @@ public class GameController : MonoBehaviour
         }
 
         TutorialCompletedScreen.SetActive(true);
+        
     }
+ 
+   
 }

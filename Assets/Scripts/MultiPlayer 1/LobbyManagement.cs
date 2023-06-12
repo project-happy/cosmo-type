@@ -6,7 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.SceneManagement;
-
+using Assets.Scripts;
 //this class represents the lobby manager on the game.
 
 public class LobbyManagement : MonoBehaviourPunCallbacks
@@ -19,6 +19,9 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
 
     [SerializeField]
     public TMP_Text roomName;
+
+    [SerializeField]
+    private TMP_InputField playerName;
 
     [SerializeField]
     public TMP_Text playerCount;
@@ -41,16 +44,16 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject startGameBtn;
 
-    void Awake()
-    {
-        Connect();
-    }
+    ExitGames.Client.Photon.Hashtable playerProperties = new ExitGames.Client.Photon.Hashtable();
+
+
 
     //connect to the server
-    private void Connect()
+    public void Connect()
     {
         Debug.Log("Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
+        MenuManager.Instance.OpenMenu("loading");
     }
 
     //callback when connect to the server
@@ -68,7 +71,11 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
     {
         Debug.Log("Joined Lobby");
         MenuManager.Instance.OpenMenu("lobby");
-        PhotonNetwork.NickName = "#" + Random.Range(0, 1000).ToString("0000");
+        if (playerName.text.Length > 0)
+        {
+            PhotonNetwork.NickName = playerName.text;
+        }
+       
     }
 
     public void OnClickCreateRoomMenu()
@@ -100,8 +107,10 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("room");
         roomName.text = PhotonNetwork.CurrentRoom.Name;
         UpdateRoomPlayersCount();
-        UpdatePlayerList();
+        UpdatePlayerList(); // when we joind the room 
         ClearnInputs();
+        CheckGameReady();
+      
         /*     startGameBtn.SetActive(PhotonNetwork.IsMasterClient);*/
     }
 
@@ -131,6 +140,7 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+       
         foreach (Transform trams in roomListContent)
         {
             Destroy(trams.gameObject);
@@ -144,7 +154,8 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    //new player enters the room
+    public override void OnPlayerEnteredRoom(Player newPlayer) 
     {
         Instantiate(playerListItemPrefab, playerListContent)
             .GetComponent<PlayerListItem>()
@@ -170,6 +181,7 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
                 newPlayer.ApplyLocalChanges();
             }
         }
+
     }
 
     private void ClearnInputs()
@@ -187,7 +199,7 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
     public void CheckGameReady()
     {
         bool isGameReady = true;
-        foreach (Player player in PhotonNetwork.PlayerList)
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             if (
                 !player.CustomProperties.ContainsKey("isReady")
@@ -204,6 +216,8 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         //load all the players at once
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel("MULTIPLAYER");
     }
+
+
 }

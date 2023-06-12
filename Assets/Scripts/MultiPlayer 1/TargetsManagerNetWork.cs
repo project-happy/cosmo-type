@@ -27,6 +27,9 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
         float minDist = float.MaxValue;
         GameObject target = null;
         List<GameObject> targets = enemySpawnerManager.GetTargets();
+   
+
+
         foreach (GameObject enemy in targets)
         {
             enemyText = enemy.GetComponentInChildren<MeshText>();
@@ -80,11 +83,17 @@ public class TargetsManagerNetWork : MonoBehaviourPunCallbacks
         );
     }
 
+
+ 
+
+
     [PunRPC]
     private void RemoveTargetRPC(int viewId)
     {
         enemySpawnerManager.RemoveTarget(PhotonView.Find(viewId).gameObject);
     }
+
+
 
     public int Count
     {

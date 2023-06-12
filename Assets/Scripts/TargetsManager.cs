@@ -13,6 +13,7 @@ public class WordDataList
     public List<InnerWord> words;
 }
 
+
 [System.Serializable]
 public class InnerWord
 {
@@ -28,17 +29,19 @@ public enum EnemyType
 
 public enum ModeType
 {
-    [Description("normal-mode")]
+    [Description("NormalMode")]
     NORMAL,
 
-    [Description("learning-mode")]
+    [Description("LearningMode")]
     LEARNING,
 
-    [Description("story-mode")]
+    [Description("StoryMode")]
     STORY,
 
-    [Description("tutorial")]
+    [Description("TutorialMode")]
     TUTORIAL,
+    [Description("MultiLobby")]
+    MULTIPLAYER
 }
 
 
@@ -94,6 +97,7 @@ public class TargetsManager : MonoBehaviour
 
     // Loading words from json file
     private IEnumerator LoadWordsFromFile(string filename)
+        
     {
         filename = string.Join("/", Application.streamingAssetsPath, "JsonFiles", mode.DisplayName(), filename);
 

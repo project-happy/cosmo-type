@@ -28,7 +28,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     [SerializeField]
     private PhotonView photonView;
-
+    private const string TargetsListKey = "TargetsList";
     public int Count
     {
         get { return targets.Count; }
@@ -36,11 +36,13 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.IsMasterClient)
         {
             SpawnTargets();
         }
+   
+    
+    
     }
 
     private async Task<List<List<Word>>> LoadWordsFromFile(string filename)
@@ -64,7 +66,6 @@ public class EnemySpawnManager : MonoBehaviour
 
         string jsonString = www.downloadHandler.text;
 #endif
-
         // Deserialize the JSON data into a list of WordData objects
         return JsonUtility.FromJson<WordDataList>(jsonString).words.Select(s => s.word).ToList();
     }
@@ -73,7 +74,6 @@ public class EnemySpawnManager : MonoBehaviour
     {
         List<List<Word>> words = await LoadWordsFromFile("words-en.json");
         targets = new List<GameObject>();
-        Debug.Log(words);
         StartCoroutine(SpawnRoutine(words));
     }
 
@@ -99,7 +99,7 @@ public class EnemySpawnManager : MonoBehaviour
             textType = obj.GetComponent<TextTypeNetwork>();
             textType.SetWords(wordList);
             photonView.RPC("AddTarget", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
-
+          
             yield return new WaitUntil(() => targets.Count != _targetsAllowed);
         }
     }
@@ -109,8 +109,9 @@ public class EnemySpawnManager : MonoBehaviour
     [PunRPC]
     private void AddTarget(int viewID)
     {
-        GameObject target = PhotonView.Find(viewID).gameObject;
-        targets.Add(target);
+        PhotonView targetView = PhotonView.Find(viewID);
+        targets.Add(targetView.gameObject);
+
     }
 
     public List<GameObject> GetTargets()
@@ -124,4 +125,7 @@ public class EnemySpawnManager : MonoBehaviour
         targets.Remove(target);
         _targetsAllowed++;
     }
+
+
+
 }

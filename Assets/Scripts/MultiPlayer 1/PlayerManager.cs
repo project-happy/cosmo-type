@@ -6,8 +6,7 @@ using System.IO;
 
 public class PlayerManager : MonoBehaviour
 {
-    PhotonView PV;
-
+/*    PhotonView PV;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -25,11 +24,9 @@ public class PlayerManager : MonoBehaviour
     //create a player at random position
     void CreateController()
     {
-        Vector2 randomPostion = new Vector2(Random.Range(-7, 9), -4.75f);
-        PhotonNetwork.Instantiate(
-            Path.Combine("PhotonPrefabs", "PlayerController"),
-            randomPostion,
-            Quaternion.identity
-        );
-    }
+      
+        Transform spawnPoint = PlayerSpwanManager.Instance.GetSpawnPoint(PhotonNetwork.LocalPlayer.ActorNumber-1);
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, Quaternion.identity, 0);
+
+    }*/
 }

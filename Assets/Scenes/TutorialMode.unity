@@ -181,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: -530077217
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 048e3f61b6de007439b544ab7ccff3c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 88c061667ecf5254e80c1b08f65ca930, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -200,8 +200,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6978250}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.086342, y: 0.27042127, z: 0}
-  m_LocalScale: {x: 1.3905075, y: 1, z: 1}
+  m_LocalPosition: {x: -0.4438, y: -0.1288, z: 0}
+  m_LocalScale: {x: 0.7948967, y: 0.8083784, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1939,7 +1939,10 @@ MonoBehaviour:
   maxSpawnVDistance: 0.28
   mode: 3
   spawnDelay: 4
+  minSpawnDelay: 0.2
   shuffleWords: 1
+  maxParrallelEnemies: 14
+  currentParrallelEnemiesLimit: 6
   targets:
   - {fileID: 1571681189}
   - {fileID: 434968705}

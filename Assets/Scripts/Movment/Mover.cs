@@ -50,13 +50,7 @@ public class Mover : MonoBehaviour
     private void FixedUpdate()
     {
 
-        //if (!isSnappedToTragget && Vector3.Distance(transform.position, currentTarget) < 8)
-        //{
-        //    isSnappedToTragget = true;
-        //    // move to player
-        //    currentTarget = playerTransform.position;
-        //}
-
+        
 
         // Calculate direction from the ship to the player
         Vector3 direction = currentTarget - transform.position;

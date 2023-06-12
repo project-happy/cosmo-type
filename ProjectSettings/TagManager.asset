@@ -11,6 +11,7 @@ TagManager:
   - EnemySpawnManager
   - LobbyManagement
   - ReadyButton
+  - RoomManager
   layers:
   - Default
   - TransparentFX
