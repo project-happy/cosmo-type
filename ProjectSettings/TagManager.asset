@@ -12,6 +12,7 @@ TagManager:
   - LobbyManagement
   - ReadyButton
   - RoomManager
+  - StatsManager
   layers:
   - Default
   - TransparentFX

@@ -21,12 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/NORMALMODE.unity
     guid: ba09e96e9c8232a4e89af8b7faf2bf4c
   - enabled: 1
-    path: Assets/Scenes/STORYMODE.unity
+    path: Assets/Scenes/StoryMode.unity
     guid: 0ce0a20698e1b7b408356ad27ee0313a
   - enabled: 1
-    path: Assets/Scenes/LEARNINGMODE.unity
+    path: Assets/Scenes/LearningMode.unity
     guid: 3e0cb52f6b0b30843b23259c41800332
-  - enabled: 0
-    path: Assets/Scenes/End Scene.unity
-    guid: f6d486d51e0daef48bc7cb043ef23b27
   m_configObjects: {}
