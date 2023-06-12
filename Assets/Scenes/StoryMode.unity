@@ -1280,15 +1280,20 @@ MonoBehaviour:
   boss: {fileID: 1502308913731659361, guid: b4bf00bea248d8644844de49e23f026b, type: 3}
   textUI: {fileID: 130289572}
   wave: 1
+  currentIntialSpeed: 2
+  maxSpeed: 6
   maxSpawnHDistance: 18
   maxSpawnVDistance: 0.28
   mode: 2
-  spawnDelay: 18
-  minSpawnDelay: 0.2
-  shuffleWords: 0
-  maxParrallelEnemies: 14
+  spawnDelay: 2.4
+  minSpawnDelay: 0.37
+  shuffleWords: 1
+  maxParrallelEnemies: 12
   currentParrallelEnemiesLimit: 6
   targets: []
+  speedIncrease: 0.2
+  enmeyIncrease: 2
+  spawnDelayDecreas: 0.4
 --- !u!1 &1193803758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,7 +1591,7 @@ PrefabInstance:
     - target: {fileID: 4394804683827637243, guid: 38efa7b53cef8e4438dbf04d3cb11bce, type: 3}
       propertyPath: targetsManager
       value: 
-      objectReference: {fileID: 1124232601}
+      objectReference: {fileID: 0}
     - target: {fileID: 8977796728934579210, guid: 38efa7b53cef8e4438dbf04d3cb11bce, type: 3}
       propertyPath: m_Name
       value: Player

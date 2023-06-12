@@ -57,7 +57,9 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] private int wave = 1;
 
-    //[SerializeField] List<Transform> spawners;
+    [SerializeField] float currentIntialSpeed = 4;
+
+    [SerializeField] float maxSpeed = 8;
 
     [SerializeField] float maxSpawnHDistance = 3f;
 
@@ -78,8 +80,9 @@ public class TargetsManager : MonoBehaviour
     [SerializeField] private List<GameObject> targets;
     public int Count { get { return targets.Count; } }
 
-
-
+    [SerializeField] float speedIncrease = 0.04f;
+    [SerializeField] int enmeyIncrease = 2;
+    [SerializeField] float spawnDelayDecreas = .4f;
 
     private IList<InnerWord> loadedWords;
 
@@ -97,7 +100,7 @@ public class TargetsManager : MonoBehaviour
 
     // Loading words from json file
     private IEnumerator LoadWordsFromFile(string filename)
-        
+
     {
         filename = string.Join("/", Application.streamingAssetsPath, "JsonFiles", mode.DisplayName(), filename);
 
@@ -145,8 +148,9 @@ public class TargetsManager : MonoBehaviour
 
             loadedWords = null;
             wave++;
-            spawnDelay = Mathf.Clamp(spawnDelay - .4f, minSpawnDelay, float.MaxValue);
-            currentParrallelEnemiesLimit = Mathf.Clamp(currentParrallelEnemiesLimit + 2, 1, maxParrallelEnemies);
+            currentIntialSpeed = Mathf.Clamp(speedIncrease + currentIntialSpeed, 1, maxSpeed);
+            spawnDelay = Mathf.Clamp(spawnDelay - spawnDelayDecreas, minSpawnDelay, float.MaxValue);
+            currentParrallelEnemiesLimit = Mathf.Clamp(currentParrallelEnemiesLimit + enmeyIncrease, 1, maxParrallelEnemies);
         }
     }
 
@@ -216,6 +220,7 @@ public class TargetsManager : MonoBehaviour
         textType = obj.GetComponent<TextType>();
         textType.SetWords(words);
         targets.Add(obj);
+        mover.SetSpeed(currentIntialSpeed);
         return obj;
     }
 

@@ -13,9 +13,6 @@ public class ShootingScript : MonoBehaviour
     private GameObject explosion;
 
     [SerializeField]
-    private TargetsManager targetsManager;
-
-    [SerializeField]
     private GameObject shoot_effect;
 
     [SerializeField]
@@ -29,14 +26,14 @@ public class ShootingScript : MonoBehaviour
 
     private GameObject currentTarget;
 
+    private TargetsManager targetsManager;
+
 
     void Start()
     {
-/*        targetsManager = GameObject
-            .FindGameObjectWithTag("TargetsManager")
-            .GetComponent<TargetsManager>();*/
         // change to defualt keyboard
         KeyboardLanguageChanger.ChangeKeyboardLanguage();
+        targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManager>();
     }
 
 
@@ -66,9 +63,7 @@ public class ShootingScript : MonoBehaviour
             Shoot();
         }
         else
-        {
             playMissSound();
-        }
 
         // if we finished the current word then change to defualt keyboard
         if (textType.FullTextLength == 0)
