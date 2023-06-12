@@ -1010,9 +1010,9 @@ MonoBehaviour:
   boss: {fileID: 1502308913731659361, guid: b4bf00bea248d8644844de49e23f026b, type: 3}
   textUI: {fileID: 130289572}
   wave: 1
-  currentIntialSpeed: 2
-  maxSpeed: 6
-  maxSpawnHDistance: 18
+  currentIntialSpeed: 1.4
+  maxSpeed: 3.5
+  maxSpawnHDistance: 14.5
   maxSpawnVDistance: 0.28
   mode: 0
   spawnDelay: 2.4

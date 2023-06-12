@@ -1280,19 +1280,19 @@ MonoBehaviour:
   boss: {fileID: 1502308913731659361, guid: b4bf00bea248d8644844de49e23f026b, type: 3}
   textUI: {fileID: 130289572}
   wave: 1
-  currentIntialSpeed: 2
-  maxSpeed: 6
-  maxSpawnHDistance: 18
+  currentIntialSpeed: 0.8
+  maxSpeed: 1.6
+  maxSpawnHDistance: 9.64
   maxSpawnVDistance: 0.28
   mode: 2
-  spawnDelay: 2.4
+  spawnDelay: 20
   minSpawnDelay: 0.37
-  shuffleWords: 1
+  shuffleWords: 0
   maxParrallelEnemies: 12
   currentParrallelEnemiesLimit: 6
   targets: []
-  speedIncrease: 0.2
-  enmeyIncrease: 2
+  speedIncrease: 0.01
+  enmeyIncrease: 1
   spawnDelayDecreas: 0.4
 --- !u!1 &1193803758
 GameObject:
