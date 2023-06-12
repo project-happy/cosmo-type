@@ -61,7 +61,7 @@ public class LobbyManagement : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to Master");
         PhotonNetwork.JoinLobby();
-        //switch the scene for all the players
+        //switch the scene for all the players 
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
