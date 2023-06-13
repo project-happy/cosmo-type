@@ -30,6 +30,7 @@ public class ShootingScript : MonoBehaviour
 
     private TargetsManager targetsManager;
 
+    private StatsManager statsManager;
 
 
 
@@ -39,8 +40,9 @@ public class ShootingScript : MonoBehaviour
     void Start()
     {
         // change to defualt keyboard
-    /*    KeyboardLanguageChanger.ChangeKeyboardLanguage();*/
+        /*    KeyboardLanguageChanger.ChangeKeyboardLanguage();*/
         targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManager>();
+        statsManager = GameObject.FindGameObjectWithTag("StatsManager").GetComponent<StatsManager>();
     }
 
 
@@ -68,18 +70,15 @@ public class ShootingScript : MonoBehaviour
             textType.RemoveFirstChar();
             textType.ChangeCurrentWordColor();
             Shoot();
-
-
-    
-      
+            statsManager.IncreaseCorrectCharactersTyped();
         }
         else
         {
             playMissSound();
         }
 
-    
- 
+        statsManager.IncreaseCharactersTyped();
+
         // if we finished the current word then change to defualt keyboard
         if (textType.FullTextLength == 0)
             KeyboardLanguageChanger.ChangeKeyboardLanguage();
@@ -142,7 +141,7 @@ public class ShootingScript : MonoBehaviour
 
     private void StartShootEffect()
     {
-        GameObject obj = (GameObject)Instantiate(
+        GameObject obj = Instantiate(
             shoot_effect,
             transform.position - new Vector3(0, 0, 5),
             Quaternion.identity
