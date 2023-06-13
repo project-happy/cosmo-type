@@ -6,6 +6,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using static UnityEngine.GraphicsBuffer;
+using TMPro;
+
 
 [System.Serializable]
 public class WordDataList
@@ -53,7 +55,8 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] GameObject boss;
 
-    [SerializeField] GUIMeshText textUI;
+
+    [SerializeField] GameObject WavePanel;
 
     [SerializeField] private int wave = 1;
 
@@ -131,7 +134,7 @@ public class TargetsManager : MonoBehaviour
         {
             // display wave started
             isUIMessageDiplayed = true;
-            StartCoroutine(UpdaeUI($"Wave {wave} started"));
+            StartCoroutine(UpdateUI($"Wave {wave} starting"));
             yield return new WaitUntil(() => !isUIMessageDiplayed);
 
             // load words
@@ -155,12 +158,13 @@ public class TargetsManager : MonoBehaviour
     }
 
 
-    IEnumerator UpdaeUI(string message)
+    IEnumerator UpdateUI(string message)
     {
 
-        textUI.UpdateText(message);
+        WavePanel.SetActive(true);
+        WavePanel.GetComponentInChildren<TMP_Text>().text = message ;
         yield return new WaitForSeconds(2);
-        textUI.Clear();
+        WavePanel.SetActive(false);
         isUIMessageDiplayed = false;
     }
 

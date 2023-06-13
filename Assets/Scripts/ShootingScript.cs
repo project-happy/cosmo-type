@@ -1,6 +1,7 @@
 using Assets.Scripts;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 using static UnityEngine.GraphicsBuffer;
 
 // This Script represents the enemy shooting.
@@ -18,6 +19,7 @@ public class ShootingScript : MonoBehaviour
     [SerializeField]
     private AudioClip shootSoundEffect;
 
+
     [SerializeField]
     private AudioClip expSoundEffect;
 
@@ -29,10 +31,15 @@ public class ShootingScript : MonoBehaviour
     private TargetsManager targetsManager;
 
 
+
+
+
+
+
     void Start()
     {
         // change to defualt keyboard
-        KeyboardLanguageChanger.ChangeKeyboardLanguage();
+    /*    KeyboardLanguageChanger.ChangeKeyboardLanguage();*/
         targetsManager = GameObject.FindGameObjectWithTag("TargetsManager").GetComponent<TargetsManager>();
     }
 
@@ -61,13 +68,22 @@ public class ShootingScript : MonoBehaviour
             textType.RemoveFirstChar();
             textType.ChangeCurrentWordColor();
             Shoot();
+
+
+    
+      
         }
         else
+        {
             playMissSound();
+        }
 
+    
+ 
         // if we finished the current word then change to defualt keyboard
         if (textType.FullTextLength == 0)
             KeyboardLanguageChanger.ChangeKeyboardLanguage();
+
     }
 
     GameObject LockOnTarget(string pressedKey)
@@ -133,4 +149,7 @@ public class ShootingScript : MonoBehaviour
         ); //Spawn muzzle flash
         obj.transform.parent = transform;
     }
+
+
+
 }
