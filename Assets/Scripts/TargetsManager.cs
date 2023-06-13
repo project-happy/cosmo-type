@@ -55,10 +55,8 @@ public class TargetsManager : MonoBehaviour
 
     [SerializeField] GameObject boss;
 
-
     [SerializeField] GameObject WavePanel;
-
-    [SerializeField] private int wave = 1;
+    [SerializeField] public int wave { get; private set; } = 1;
 
     [SerializeField] float currentIntialSpeed = 4;
 
@@ -87,6 +85,8 @@ public class TargetsManager : MonoBehaviour
     [SerializeField] int enmeyIncrease = 2;
     [SerializeField] float spawnDelayDecreas = .4f;
 
+    private StatsManager statsManager;
+
     private IList<InnerWord> loadedWords;
 
     private bool isUIMessageDiplayed = true;
@@ -94,6 +94,7 @@ public class TargetsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        statsManager = GameObject.FindGameObjectWithTag("StatsManager").GetComponent<StatsManager>();
         if (mode == ModeType.TUTORIAL)
             return;
         targets = new List<GameObject>();
@@ -162,7 +163,7 @@ public class TargetsManager : MonoBehaviour
     {
 
         WavePanel.SetActive(true);
-        WavePanel.GetComponentInChildren<TMP_Text>().text = message ;
+        WavePanel.GetComponentInChildren<TMP_Text>().text = message;
         yield return new WaitForSeconds(2);
         WavePanel.SetActive(false);
         isUIMessageDiplayed = false;
@@ -254,6 +255,7 @@ public class TargetsManager : MonoBehaviour
     public void RemoveTarget(GameObject gameObject)
     {
         targets.Remove(gameObject);
+        statsManager.IncreaseWordsTyped();
     }
 
     private void OnDrawGizmosSelected()
